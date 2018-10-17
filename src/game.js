@@ -4,12 +4,23 @@ import { tictactoe } from './reducers';
 
 
 export class Game {
-  currentState = {};
+  store;
   start() {
-    this.currentState = tictactoe(null, {type: 'RESET_GAME'} );
     this.draw();
+
+
+    this.store = createStore(tictactoe);
+    this.store.subscribe( (state) => {
+      this.update();
+      if (this.store.getState().winner !== 'n') {
+        this.win();
+      }
+    });
+
+    this.store.dispatch({type: 'RESET_GAME'});
   }
 
+  // disegna la griglia 3x3
   draw() {
     const container = document.getElementById('game-container');
     container.innerHTML = '';
@@ -23,50 +34,44 @@ export class Game {
 
     for(var i = 0; i < cellNodes.length; i++) {
       const index = i;
-      // cellNodes[i].innerHTML = index;
       cellNodes[i].onclick = () => {
         this.gameMove(index);
       };
     }
   }
 
+  // handler click sulla cella
   gameMove(index) {
-    if (this.currentState.winner !== 'n') {
+    if (this.store.getState().winner !== 'n') {
       return;
     }
-    this.currentState = tictactoe(
-      this.currentState,
-      {type: 'GAME_MOVE', index: index, symbol: this.currentState.currentPlayer}
-    );
-
-    this.update();
-
-    if (this.currentState.winner !== 'n') {
-      setTimeout( () => {
-        this.win();
-      }, 200);
-    }
+    this.store.dispatch({type: 'GAME_MOVE', index: index, symbol: this.store.getState().currentPlayer});
   }
 
+  // ridisegna il contenuto delle celle
   update() {
-    this.currentState.board.forEach( (element, index) => {
+    this.store.getState().board.forEach( (element, index) => {
       const node = document.getElementsByClassName('row-cell-' + index)[0];
       if(element) {
         node.setAttribute('data-cellnum', element);
         node.classList.add('selected');
         node.classList.add('selected-' + element);
       }
-      // node.innerHTML = element;
     });
   }
 
   win() {
-    if(this.currentState.winner !== 'd') {
-      alert(this.currentState.winner + ' WIN!');
-    } else {
-      alert('DRAW');
-    }
+    // il setTimeout è un hack per aggirare il fatto che il paint di innerHTMl
+    // non è sincrono per cui verrebbe mostrato l'alert PRIMA del ridisegno
+    // Chrome/*
+    setTimeout( () => {
+      if(this.store.getState().winner !== 'd') {
+        alert(this.store.getState().winner + ' WIN!');
+      } else {
+        alert('DRAW');
+      }
 
-    this.start();
+      this.start();
+    }, 200);
   }
 }
