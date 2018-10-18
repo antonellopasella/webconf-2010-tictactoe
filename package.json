@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "build": "webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors && cp index.html dist/index.html && mkdir dist/style && cp style/* dist/style"
+    "build": "rm -R dist/* && webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors && cp index.html dist/index.html && mkdir dist/style && cp style/* dist/style"
   },
   "author": "Antonello Pasella",
   "license": "ISC",
