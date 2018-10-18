@@ -1,20 +1,23 @@
 body {
   background: url(blueprint.png);
-  background-size: contain;
+  background-size: cover;
 }
 
+
 #game-container {
-  margin: 5vw;
+  margin-top: 5vh;
+  max-width: 600px !important;
 }
 
 .row-cell {
-  width: calc(33vw - 5vw);
-  height: calc(33vw - 5vw);
+  height: calc(100%/3 - 2vw);
+  width: calc(100%/3 - 2vw);
   border-radius: 5%;
   margin: 1vw;
   background: #ccc;
   overflow: hidden;
   font-size: 5rem;
+  flex-basis: auto;
 }
 
 .row-cell.selected {
@@ -47,9 +50,16 @@ body {
   transform: rotate(0deg);
 }
 
-.row-cell.selected-X::before {
+/* .row-cell.selected-X::before {
   color: #941818;
 }
 .row-cell.selected-O::before {
   color: #173061;
+} */
+
+.row-cell.selected-X {
+  background-color: #941818;
+}
+.row-cell.selected-O{
+  background-color: #173061;
 }

@@ -26,9 +26,9 @@ export class Game {
     const container = document.getElementById('game-container');
     container.innerHTML = '';
     const row = document.createElement('div');
-    row.className = 'row';
+    row.className = 'row h-100';
     for (let i = 0; i < 9; i++) {
-      row.innerHTML += '<div data-cellnum="' + i + '" class="col- row-cell row-cell-' + i + '"></div>';
+      row.innerHTML += '<div data-cellnum="' + i + '" class="col-4 row-cell row-cell-' + i + '"></div>';
     }
     container.appendChild(row);
     const cellNodes = document.getElementsByClassName('row-cell')
@@ -39,6 +39,14 @@ export class Game {
         this.gameMove(index);
       };
     }
+
+    window.addEventListener('resize', this.onResize);
+    this.onResize();
+  }
+
+  onResize() {
+    const container = document.getElementById('game-container');
+    container.style.height = container.clientWidth + 'px';
   }
 
   // handler click sulla cella
@@ -70,10 +78,12 @@ export class Game {
     // non è sincrono per cui verrebbe mostrato l'alert PRIMA del ridisegno
     // Chrome/*
     setTimeout( () => {
-      if(this.store.getState().winner !== 'd') {
-        alert(this.store.getState().winner + ' WIN!');
-      } else {
+      if(this.store.getState().winner === 'd') {
         alert('DRAW');
+      } else if(this.store.getState().winner === 'O') {
+        alert('BLUE WIN');
+      } else {
+        alert('RED WIN');
       }
 
       this.start();
