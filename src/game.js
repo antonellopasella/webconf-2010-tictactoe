@@ -10,6 +10,7 @@ export class Game {
 
 
     this.store = createStore(tictactoe);
+
     this.store.subscribe( (state) => {
       this.update();
       if (this.store.getState().winner !== 'n') {
@@ -45,7 +46,11 @@ export class Game {
     if (this.store.getState().winner !== 'n') {
       return;
     }
-    this.store.dispatch({type: 'GAME_MOVE', index: index, symbol: this.store.getState().currentPlayer});
+    this.store.dispatch({
+      type: 'GAME_MOVE',
+      index: index,
+      symbol: this.store.getState().currentPlayer
+    });
   }
 
   // ridisegna il contenuto delle celle
